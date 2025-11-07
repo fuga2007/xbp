@@ -1,0 +1,100 @@
+<head>
+<title>ふうがの第5回</title>
+<link ref="stylesheet" href="./css/style.css"
+style>
+<style>
+body
+{
+color:aqua;
+background-color:black;
+text-align:left;
+margin:40px;}
+</style>
+</head>
+<body>
+<h1>ライブラリやAPIでアプリ作成</h1>
+<h2>タイトル：Spotify曲当てクイズ</h2>
+<div>
+    私は音楽を聴くときにSpotifyをよく使います。それらを使って何か作れないかと思い、検索してみると<br>
+    SpotifyのAPIがありました。これはやってみたいと思いSpotifyによる曲当てクイズアプリを作ってみました。
+</div>
+
+<h2>どのような機能があるプログラムか</h2>
+<p>このプログラムはspotifyのAPIを使って楽曲情報を取得し、アーティストの名前やアルバム名、リリース日、人気度などから<br>
+   曲を当てるところまでを自動化したプログラムです。また、人気度の下にはその曲のURLが貼ってあるので誰でも聴くことができます。
+</p>
+<h2>ソースコード</h2>
+<div>ソースコードは以下の通りです。</div>
+
+<pre><code>
+<div align="left">
+import os
+import random
+from dotenv import load_dotenv
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+
+# ===== .env から環境変数を読み込む =====
+load_dotenv()
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+
+if not CLIENT_ID or not CLIENT_SECRET:
+    print("⚠️ エラー: .env ファイルに CLIENT_ID と CLIENT_SECRET を設定してください。")
+    exit()
+
+# ===== Spotify API 認証 =====
+auth_manager = SpotifyClientCredentials(client_id=CLIENT_ID, client_secret=CLIENT_SECRET)
+sp = spotipy.Spotify(auth_manager=auth_manager)
+
+# ===== 人気アーティスト一覧 =====
+artists = ["YOASOBI", "Ado", "Official髭男dism", "King Gnu", "Vaundy", "米津玄師"]
+artist_name = random.choice(artists)
+
+print(f"\n🎵 アーティスト「{artist_name}」からランダムに曲を選びます...\n")
+
+# ===== 曲データを取得 =====
+results = sp.search(q=f'artist:{artist_name}', type='track', limit=10)
+tracks = results['tracks']['items']
+
+if not tracks:
+    print("⚠️ 曲が見つかりませんでした。もう一度試してください。")
+    exit()
+
+# ===== ランダムに1曲選ぶ =====
+track = random.choice(tracks)
+
+track_name = track['name']
+album_name = track['album']['name']
+release_date = track['album']['release_date']
+popularity = track['popularity']
+
+# ===== クイズヒントを表示 =====
+print("🧩 ヒントはこちら：")
+print(f"・アーティスト：{artist_name}")
+print(f"・アルバム名：{album_name}")
+print(f"・リリース日：{release_date}")
+print(f"・人気度（0〜100）：{popularity}")
+print(f"・Spotify URL：{track['external_urls']['spotify']}")
+print("-" * 40)
+
+# ===== 回答 =====
+answer = input("❓ この曲のタイトルは？：")
+
+if answer.strip().lower() in track_name.lower():
+    print("🎉 正解！すごい！")
+else:
+    print(f"❌ 残念！正解は「{track_name}」でした！")
+
+print("\n👉 聴いてみたい人はこちら：", track['external_urls']['spotify'])
+</code></pre> 
+<h2>感想</h2>
+<p>ソースコードの部分はAIに作ってもらったが、回数を重ねるごとに違うソースコードを表示するので選別に時間がかかった。<br>
+   また、最初に作ってもらったコードは直接APIキーを貼るものでAPIキーはアップしちゃいけないというのを無視していてそこを改善するために<br>
+   自分でキーを隠すコードを調べて実践できたのはよかった。同時にAIも一度言われたことしか覚えられないのはまだ技術が進歩していないと感じた。
+</p>
+
+
+</body>
+
+
