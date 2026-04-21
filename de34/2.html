@@ -1,0 +1,86 @@
+<head>
+ <meta charset="UTF-8">
+<title>ふうがの第1回</title>
+<link rel="stylesheet" href="./css/style.css"
+</head>
+<body>
+<h1>第2回</h1>
+<h2>Arduinoの機能を組み合わせて作品作り</h2>
+<h2>①作品タイトル：社会風刺</h2><br>
+
+<p>ディズニーの顔ミッキーとUSJのミニオンが戦うようにステッピングモーターを組み合わせて
+    明るい状態では静止し、暗い状態だと動くようにした。これにより、表では争わないが、
+    裏では実はバチバチなのかもしれないと思わせるような作品になっている。</p>
+<br>
+
+<h2>②使用したもの</h2>
+<p>
+・Arduino<br>
+・ステッピングモーター<br>
+・モータードライバ<br>
+・明るさセンサー<br>
+・白画用紙<br>
+
+</p>
+<br>
+<h2>③仕組み</h2>
+<div>明るさセンサーの値（int thresholdの値）を下回ると暗いとみなされ、モーターは動き、上回ると
+     明るいとみなされ、モーターは止まる
+</div>
+<br>
+<h2>④実行したプログラム</h2>
+ <pre>
+const int DIR  = 8;
+const int STEP = 9;
+
+int stepsPerRevolution = 200;
+int threshold = 200;
+
+void setup() {
+  pinMode(DIR, OUTPUT);
+  pinMode(STEP, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  int val = analogRead(1);
+  Serial.println(val);
+
+  if (val > threshold) {
+    // 暗い → 往復ビンタ
+    rotateAngle(90, HIGH); // 右
+    delay(10);
+    rotateAngle(90, LOW);  // 左
+    delay(10);
+  } else {
+    // 明るい → 停止
+    digitalWrite(STEP, LOW);
+  }
+}
+
+void rotateAngle(float angle, int direction) {
+  int steps = stepsPerRevolution * angle / 360;
+
+  digitalWrite(DIR, direction);
+
+  for (int i = 0; i < steps; i++) {
+    digitalWrite(STEP, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(STEP, LOW);
+    delayMicroseconds(delaytime);
+  }
+}
+  </pre>
+<br>
+<h2>⑤動画</h2>
+<iframe width="600" height="300"
+    src="https://www.youtube.com/embed/HbbDi1CyoCc?si=mF0V1nvGLFnPKjTT"
+    allowfullscreen>
+  </iframe>
+<br>
+<h2>⑥感想</h2>
+<p> 前回の授業を欠席していて今回が初めての参加となったが、センサーやステッピングモーター、LED
+    など多機能にわたることをほとんどArduino一つでできるのはすごいなと思った。
+    同じグループの二人にプログラムの所はほとんど任せてしまったので、自分ひとりでもプログラムできるように
+    努力していきたい。
+</p>
