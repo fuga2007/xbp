@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+      <meta charset="UTF-8">
+      <title>ふうがの第3回</title>
+      <link rel="stylesheet" href="./css/style.css">
+      <style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: white;
+}
+</style>
+</head>
+<body>
+      <h1>第３回</h1>
+      <h2>flaskについて</h2><br>
+      <div>
+     ・ flaskとはPythonのwebアプリケーションフレームワーク。
+     <br>
+     ・小規模向けの簡単なwebアプリケーションを作るのに適している。
+      </div>
+      <div>webフレームワークとは、ウェブサイトやウェブアプリケーションを作るための
+        機能を提供し、ウェブフレームワークを使わない時よりもより容易にwebアプリケーション
+        を作ることができるもの。
+        <br>
+      </div>
+      <h2>flaskのプログラム例</h2>
+<style>
+.code-block {
+    background: #1e1e1e;
+    color: #dcdcdc;
+    padding: 15px;
+    border-radius: 10px;
+    font-family: Consolas, monospace;
+}
+
+.section {
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px;
+}
+</style>
+
+<div class="section">
+    <h2>① Flaskの基本</h2>
+    <pre class="code-block"><code>
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return "Hello Flask!"
+    </code></pre>
+    <p>このコードはFlaskの基本構造で、トップページにアクセスすると文字を表示する。</p>
+</div>
+
+<div class="section">
+    <h2>② テンプレートの使用</h2>
+    <pre class="code-block"><code>
+from flask import render_template
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+    </code></pre>
+    <p>HTMLテンプレートを使うことで、より柔軟なページ表示が可能になる。</p>
+</div>
+
+<div class="section">
+    <h2>プログラムの説明</h2>
+<p>
+app = Flask(__name__)：Flaskアプリケーションの本体を作成するための記述である。
+</p>
+<br>
+<p>
+app.route：URLと処理を対応付けるための機能である。
+指定したURLにアクセスされたときに、対応する関数が実行される。
+</p>
+<br>
+<p>
+def index()：指定されたURLにアクセスされたときに実行される関数である。
+</p>
+<br>
+<p>
+return "Hello Flask!"：ブラウザに表示する内容を返す記述である。
+（今回のコマンドはアクセスされたときに「Hellp Flask!」と表示される）
+</p>
+<br>
+<p>
+render_template：FlaskでHTMLテンプレートを表示するための関数である。
+templatesフォルダ内のHTMLファイルを読み込み、ブラウザに表示する役割を持つ。
+これにより、Pythonの処理とHTMLのデザインを分離することができる。
+</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
