@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+      <meta charset="UTF-8">
+      <title>ふうがの第4回</title>
+      <link rel="stylesheet" href="./css/style.css">
+      <style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    color: white;
+}
+</style>
+</head>
+<body>
+      <h1>第４回</h1>
+      <h2>KU-BizTech Portal</h2><br>
+      <div>
+     今回はKU-BizTech Portalとflaskを使って簡単なクイズアプリを作成した。<br>
+
+     選択式のクイズアプリで正解した問題数に応じてランクが振り分けられる仕組みになっている。
+     （１００点ならSランク８０点ならAランクというふうに）
+      </div>
+     
+<style>
+.code-block {
+    background: #1e1e1e;
+    color: #dcdcdc;
+    padding: 15px;
+    border-radius: 10px;
+    font-family: Consolas, monospace;
+}
+
+.section {
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px;
+}
+</style>
+<h1>使ったコード一覧</h1>
+<h2>app.py</h2>
+
+<pre><code>
+from flask import Flask, render_template, request
+import os
+
+app = Flask(__name__)
+
+quiz_data = [
+    {
+        "question": "Pythonの開発者は？",
+        "choices": [
+            "Guido van Rossum",
+            "Bill Gates",
+            "Linus Torvalds",
+            "Steve Jobs"
+        ],
+        "answer": "Guido van Rossum"
+    },
+    {
+        "question": "HTMLの正式名称は？",
+        "choices": [
+            "Hyper Text Markup Language",
+            "High Text Machine Language",
+            "Hyper Tool Markup Language",
+            "Home Text Language"
+        ],
+        "answer": "Hyper Text Markup Language"
+    },
+    {
+        "question": "日本の首都は？",
+        "choices": [
+            "大阪",
+            "東京",
+            "京都",
+            "福岡"
+        ],
+        "answer": "東京"
+    }
+]
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+
+    score = None
+    rank = None
+
+    if request.method == "POST":
+
+        score = 0
+
+        for i in range(len(quiz_data)):
+
+            user_answer = request.form.get(f"question-{i}")
+
+            correct_answer = quiz_data[i]["answer"]
+
+            if user_answer == correct_answer:
+                score += 1
+
+        percentage = int((score / len(quiz_data)) * 100)
+
+        if percentage == 100:
+            rank = "S"
+        elif percentage >= 80:
+            rank = "A"
+        elif percentage >= 60:
+            rank = "B"
+        else:
+            rank = "C"
+
+    return render_template(
+        "index.html",
+        quiz_data=quiz_data,
+        score=score,
+        rank=rank
+    )
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 3000))
+    app.run(host="0.0.0.0", port=port)
+</code></pre>
+<h2>index.html</h2>
+
+<pre><code>
+
+&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+
+    &lt;title&gt;QUIZ MASTER&lt;/title&gt;
+
+    &lt;link rel="stylesheet"
+          href="&#123;&#123; url_for('static', filename='css/style.css') &#125;&#125;"&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;div class="background-glow"&gt;&lt;/div&gt;
+
+&lt;div class="main-title"&gt;
+    &lt;h1&gt;🎮 QUIZ MASTER&lt;/h1&gt;
+    &lt;p&gt;ダークモード風 Flask クイズアプリ&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;form method="POST"&gt;
+
+    &#123;% for quiz in quiz_data %&#125;
+
+    &#123;% set quiz_index = loop.index0 %&#125;
+
+    &lt;div class="quiz-card"&gt;
+
+        &lt;h2&gt;
+            Q&#123;&#123; loop.index &#125;&#125;.
+            &#123;&#123; quiz["question"] &#125;&#125;
+        &lt;/h2&gt;
+
+        &#123;% for choice in quiz["choices"] %&#125;
+
+        &lt;label class="choice-label"&gt;
+
+            &lt;input
+                type="radio"
+                name="question-&#123;&#123; quiz_index &#125;&#125;"
+                value="&#123;&#123; choice &#125;&#125;"
+                required&gt;
+
+            &lt;span&gt;&#123;&#123; choice &#125;&#125;&lt;/span&gt;
+
+        &lt;/label&gt;
+
+        &#123;% endfor %&#125;
+
+    &lt;/div&gt;
+
+    &#123;% endfor %&#125;
+
+    &lt;div class="button-area"&gt;
+
+        &lt;button type="submit" class="submit-button"&gt;
+            RESULT
+        &lt;/button&gt;
+
+    &lt;/div&gt;
+
+&lt;/form&gt;
+
+&#123;% if score is not none %&#125;
+
+&lt;div class="result-box"&gt;
+
+    &lt;h2&gt;🏆 RESULT&lt;/h2&gt;
+
+    &lt;p class="score-text"&gt;
+        &#123;&#123; score &#125;&#125; /
+        &#123;&#123; quiz_data|length &#125;&#125; 正解
+    &lt;/p&gt;
+
+    &lt;div class="rank-box"&gt;
+        &#123;&#123; rank &#125;&#125; RANK
+    &lt;/div&gt;
+
+&lt;/div&gt;
+
+&#123;% endif %&#125;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+
+<h2>style.css</h2>
+
+<pre><code>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background: linear-gradient(135deg, #0f172a, #111827);
+    color: white;
+    overflow-x: hidden;
+}
+
+.background-glow {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    background: rgba(124, 58, 237, 0.25);
+    filter: blur(120px);
+    top: -200px;
+    right: -150px;
+    z-index: -1;
+}
+
+.main-title {
+    text-align: center;
+    padding-top: 80px;
+    margin-bottom: 60px;
+}
+
+.main-title h1 {
+    font-size: 56px;
+    color: #c084fc;
+}
+
+.main-title p {
+    color: #cbd5e1;
+    font-size: 18px;
+}
+
+.quiz-card {
+    width: 90%;
+    max-width: 800px;
+    margin: 40px auto;
+    background: #1e293b;
+    border-radius: 24px;
+    padding: 35px;
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.3);
+}
+
+.quiz-card h2 {
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
+.choice-label {
+    display: block;
+    background: #334155;
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: 0.25s;
+    border: 2px solid transparent;
+}
+
+.choice-label:hover {
+    background: #7c3aed;
+    transform: scale(1.02);
+}
+
+.choice-label input {
+    margin-right: 12px;
+}
+
+.button-area {
+    text-align: center;
+    margin: 80px 0;
+}
+
+.submit-button {
+    background: #7c3aed;
+    color: white;
+    border: none;
+    padding: 20px 60px;
+    font-size: 24px;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.submit-button:hover {
+    transform: scale(1.05);
+    background: #9333ea;
+}
+
+.result-box {
+    width: 90%;
+    max-width: 700px;
+    margin: 50px auto 100px;
+    background: #1e293b;
+    border-radius: 24px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 0 30px rgba(124, 58, 237, 0.4);
+}
+
+.score-text {
+    font-size: 32px;
+}
+
+.rank-box {
+    margin: 30px auto 0;
+    width: 240px;
+    padding: 25px;
+    border-radius: 20px;
+    background: #7c3aed;
+    font-size: 42px;
+    font-weight: bold;
+    box-shadow: 0 0 20px rgba(192, 132, 252, 0.7);
+}
+</code></pre>
+
+<h2>実際に動いている動画</h2>
+<div class="video">
+  <iframe width="560" height="315"
+    src="https://www.youtube.com/embed/ZUxkAdMFuzc"
+    allowfullscreen>
+  </iframe>
+</div>
+<h2>感想</h2>
+<p>今回KU-BizTech Portalを使ってみて今までの授業でやってきたことの中で一番
+    今プログラミングしているなと実感した。一つのミスですぐにエラーを吐かれたり、思うようにいかないことが
+    一番多かったとも感じた。
+    また、そうした疑問点や不安点を何でも投げてすぐに解決策を出してくれるAIはやはり便利で
+    同時に使い方を理解して作業に組み込んでいけたらいいなと思った。
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>

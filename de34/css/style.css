@@ -51,4 +51,19 @@ span.blackback{
     background: #393939;
     color: #efefef;
 }
+pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 25px;
+    border-radius: 16px;
+    overflow-x: auto;
+    line-height: 1.6;
+    margin-top: 20px;
+    white-space: pre-wrap;
+}
+
+code {
+    font-family: monospace;
+    font-size: 15px;
+}
 
