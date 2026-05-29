@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+      <meta charset="UTF-8">
+      <title>ふうがの第6回</title>
+      <link rel="stylesheet" href="./css/style.css">
+      <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Yu Gothic", sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+    line-height: 1.8;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+}
+
+header h1 {
+    margin-bottom: 10px;
+}
+
+.container {
+    width: 80%;
+    max-width: 1000px;
+    margin: 30px auto;
+}
+
+section {
+    background-color: white;
+    margin-bottom: 25px;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #4CAF50;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 5px;
+}
+
+h3 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 8px;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+    margin-top: 30px;
+}
+</style>
+</head>
+<body>
+<h1>食材からレシピ検索アプリ</h1>
+
+<p>
+入力した食材を使った料理を検索できるWebアプリです。
+レシピの登録機能も備えており、自分だけのレシピデータベースを作成できます。
+</p>
+<h2>アプリ概要</h2>
+
+<p>
+本アプリは、ユーザーが食材名を入力すると、
+その食材を使用するレシピを検索できるシステムです。
+また、新しいレシピを登録することも可能です。
+</p>
+<h2>データベース設計</h2>
+
+<h3>recipes テーブル</h3>
+
+<p>
+レシピ名や説明文を管理するテーブル
+</p>
+
+<h3>recipe_ingredients テーブル</h3>
+
+<p>
+各レシピで使用する食材を管理するテーブル
+</p>
+
+<h2>システム構成</h2>
+
+<p>
+ユーザーが食材を入力すると、
+FlaskがPostgreSQLへ検索を行い、
+該当するレシピを画面に表示します。
+</p>
+
+<h2>主な機能</h2>
+
+<ul>
+    <li>食材検索機能</li>
+    <li>レシピ登録機能</li>
+    <li>レシピ一覧表示機能</li>
+</ul>
+
+<h2>工夫した点</h2>
+
+<p>
+食材名で検索するだけで、
+その食材を使用する複数のレシピを表示できるようにしました。
+
+また、レシピと食材を別テーブルで管理することで、
+1つのレシピに複数の食材を登録できる設計にしました。
+</p>
+
+<h2>動画</h2>
+
+<div class="video">
+  <iframe width="560" height="315"
+    src="https://youtube.com/embed/jmtIl5mVs_o"
+    allowfullscreen>
+  </iframe>
+</div>
+<h2>まとめ</h2>
+
+<p>
+FlaskとPostgreSQLを利用して、
+食材からレシピを検索できるWebアプリを開発しました。
+データベースを利用することで、
+効率的なレシピ管理と検索を実現しています。
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
