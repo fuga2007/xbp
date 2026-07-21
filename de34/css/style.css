@@ -66,4 +66,12 @@ code {
     font-family: monospace;
     font-size: 15px;
 }
+iframe {
+    width: 360px;
+    height: 640px;
+    display: block;
+    margin: 20px auto;
+    border: none;
+    border-radius: 12px;
+}
 
